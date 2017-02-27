@@ -672,3 +672,39 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
+
+
+
+====================================================================
+== Licenses for externall libraries included in this assembly    ==
+====================================================================
+
+tika
+junit
+spring
+log4j
+jackson
+hibernate
+gson
+
+=========================================================================
+== Tika is licensed under the Apache License Version 2.0              ==
+=========================================================================
+=========================================================================
+== JUnit is licensed under the Eclipse Public License 1.0             ==
+=========================================================================
+=========================================================================
+== Spring is licensed under the Apache License Version 2.0            ==
+=========================================================================
+=========================================================================
+== Log4J is licensed under the Apache License Version 2.0             ==
+=========================================================================
+=========================================================================
+== Jackson is licensed under the Apache License Version 2.0           ==
+=========================================================================
+=========================================================================
+== Hibernate is licensed under the LGPL v2.1                          ==
+=========================================================================
+=========================================================================
+== Gson is licensed under the Apache License Version 2.0              ==
+=========================================================================
