@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+
+    <!-- Definition for org.uclv.darkaiv.organizer.TikaDocumentFactory -->
+    <bean id="dcTraslator" class="org.vlir.darkaiv.mappers.DocumentToDC">
+
+        <!-- results in a setMetadataMapperDocument(java.util.Map) call -->
+        <property name="traslator">
+            <map>
+                
+           
+<!--//        traslator.put("updated_at", updated_at);
+//        traslator.put("creation_date", creation_date);
+//        traslator.put("updated_date", updated_date);
+//        traslator.put("year", year);
+//        traslator.put("source", source);
+//        traslator.put("edition", edition);
+//        traslator.put("institution", institution);-->
+
+                <entry key="issn" value="issn"/>
+                <entry key="isbn" value="isbn"/>
+                <entry key="doi" value="doi"/>
+                <entry key="type" value="type"/>
+                <entry key="thesis_type" value="type"/>
+                <entry key="issue" value="issue"/>
+                <entry key="chapter" value="chapter"/>
+                <entry key="city" value="coverageSpatial"/>
+                <entry key="editors" value="editor"/>
+                <entry key="idiom" value="language"/>
+                <entry key="volume" value="volume"/>
+                <entry key="publisher" value="publisher"/>
+                <entry key="pages" value="pages"/>
+                <entry key="key_words" value="subject"/>
+                <entry key="_abstract" value="_abstract"/>
+                <entry key="created_at" value="date"/>
+                <entry key="title" value="title"/>
+
+
+            </map>
+        </property>
+
+        
+
+    </bean>
+</beans>

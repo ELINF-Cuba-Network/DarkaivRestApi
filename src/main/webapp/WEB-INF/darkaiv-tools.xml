@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="WEB-INF/restapi-config.properties"/>
+    </bean>
+    
+<!--    <bean id="appProperties"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+        <list>
+            <value>config/crossref/crossref.properties</value>
+            <value>config/grobid_service/grobid.properties</value>
+            <value>config/worldcat/worldcat.properties</value>
+        </list>
+    </property>
+</bean>-->
+    
+    
+    
+    
+   <bean id="grobidExtractor" class="org.vlir.darkaiv.md_extractor.GrobidExtractor">
+        <!--<property name="host" value="http://localhost:8081/"/>-->
+        <property name="host" value="${grobidExtractor.host}"/>
+        <!--esta propiedad no se esta usando realmente-->
+        <property name="port" value="${grobidExtractor.port}"/>
+    </bean>
+    
+    <!--At least for now, it has not been used-->
+    <bean id="grobidRESTParser" class="org.vlir.darkaiv.md_extractor.util.GrobidRESTParser"> 
+        <property name="host" value="{grobidExtractor.host}"/>
+    </bean>
+
+    <bean id="crossrefReviewer" class="org.vlir.darkaiv.reviewer.CrossRef">
+        <!--<property name="host" value="http://api.crossref.org/works/"/>-->
+        <property name="host" value="${crossrefReviewer.host}"/>
+<!--        <property name="host" value="${crossref.server.url}"/>-->
+    </bean>
+
+    <bean id="worldcatReviewer" class="org.vlir.darkaiv.reviewer.WorldCat">
+        <!--<property name="host" value="http://xisbn.worldcat.org/webservices/xid/isbn/"/>-->
+        <property name="host" value="${worldcatReviewer.host}"/>
+        <!--<property name="config" value="?method=getMetadata&amp;format=json&amp;fl=*"/>-->
+        <property name="config" value="${worldcatReviewer.config}"/>
+<!--        <property name="host" value="${worldcat.server.url}"/>
+        <property name="config" value="${worldcat.server.url.config}"/>-->
+    </bean>
+    
+</beans>
