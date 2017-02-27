@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+>
+
+    <context:component-scan base-package="org.vlir.darkaiv.controller" />
+    <mvc:annotation-driven />
+
+    <import resource="tika_mapper_bean.xml"/>
+    <import resource="grobid_mapper_bean.xml"/>
+    <import resource="crossref_mapper_bean.xml"/>
+    <import resource="worldcat_mapper_bean.xml"/>
+    <import resource="dublincore_mapper_bean.xml"/>
+    <import resource="darkaiv-tools.xml"/>
+    
+   
+    
+<!--    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="./restapi-config.properties"/>
+    </bean>
+    
+    <bean id="dataSource" destroy-method="close"
+          class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>-->
+    
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/darkaiv" />
+        <property name="username" value="root" />
+        <property name="password" value="ok" />
+    </bean>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>org.vlir.darkaiv.model.Document</value>
+                <value>org.vlir.darkaiv.model.Identifier</value>
+                                
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <!--<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>-->
+            </props>
+        </property>
+    </bean>
+
+    <bean id="txManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+    <bean id="dataDao" class="org.vlir.darkaiv.dao.DataDaoImpl"></bean>
+    <bean id="dataServices" class="org.vlir.darkaiv.services.DataServicesImpl"></bean>
+    <bean id="extractionServices" class="org.vlir.darkaiv.services.ExtractionServicesImpl"></bean>
+        
+        
+<!--    <bean id="grobidExtractor" class="org.vlir.darkaiv.md_extractor.GrobidExtractor">
+        <property name="host" value="http://localhost:8081/"/>
+        <property name="port" value="8080"/>
+    </bean>
+
+    <bean id="crossrefReviewer" class="org.vlir.darkaiv.reviewer.CrossRef">
+        <property name="host" value="http://api.crossref.org/works/"/>
+    </bean>
+
+    <bean id="worldcatReviewer" class="org.vlir.darkaiv.reviewer.WorldCat">
+        <property name="host" value="http://xisbn.worldcat.org/webservices/xid/isbn/"/>
+        <property name="config" value="?method=getMetadata&amp;format=json&amp;fl=*"/>
+    </bean>-->
+        
+    
+    
+    <!--Model config files-->
+    <!--Definition for org.uclv.darkaiv.organizer.CRDocumentFactory--> 
+<!--    <bean id="crossref" class="org.vlir.darkaiv.mappers.CRDocumentFactory">
+
+        results in a setMetadataMapperDocument(java.util.Map) call 
+        <property name="metadataMapperDocument">
+            <map>
+
+                <entry key="publisher" value="publisher"/>
+                <entry key="title" value="title"/>
+                <entry key="issue" value="issue"/>
+                <entry key="page" value="pages"/>
+                <entry key="type" value="type"/>
+                <entry key="volume" value="volume"/>
+
+
+            </map>
+        </property>
+
+        results in a setMetadataMapperIdentifier(java.util.Map) call 
+        <property name="metadataMapperIdentifier">
+            <map>
+
+                <entry key="doi" value="doi"/>
+                <entry key="issn" value="issn"/>
+
+            </map>
+        </property>
+
+    </bean>
+    
+    Definition for org.uclv.darkaiv.organizer.GrobidDocumentFactory 
+    <bean id="grobid" class="org.vlir.darkaiv.mappers.GrobidDocumentFactory">
+
+        results in a setMetadataMapperDocument(java.util.Map) call 
+        <property name="metadataMapperDocument">
+            <map>
+
+                <entry key="abstract" value="abstract"/>
+                <entry key="title" value="title"/>
+                <entry key="issue" value="issue"/>
+                <entry key="page" value="pages"/>
+                <entry key="type" value="type"/>
+                <entry key="volume" value="volume"/>
+                <entry key="source" value="source"/>
+                <entry key="type" value="type"/>
+                <entry key="keyword" value="key_words"/>               
+
+
+            </map>
+        </property>
+
+        results in a setMetadataMapperIdentifier(java.util.Map) call 
+        <property name="metadataMapperIdentifier">
+            <map>
+
+                <entry key="doi" value="doi"/>
+                <entry key="arXiv" value="arXiv"/>
+
+            </map>
+        </property>
+
+    </bean>
+    
+    Definition for org.uclv.darkaiv.organizer.TikaDocumentFactory 
+    <bean id="tika" class="org.vlir.darkaiv.mappers.TikaDocumentFactory">
+
+        results in a setMetadataMapperDocument(java.util.Map) call 
+        <property name="metadataMapperDocument">
+            <map>
+
+                <entry key="creation-date" value="creation_date"/>
+                <entry key="last-save-date" value="updated_date"/>
+                <entry key="page-count" value="pages"/>
+                <entry key="xmptpg:npages" value="pages"/>
+                <entry key="type" value="type"/>
+                <entry key="meta:page-count" value="pages"/>
+                <entry key="xmptpg:npages" value="pages"/>
+                <entry key="publisher" value="publisher"/>
+                <entry key="dc:publisher" value="publisher"/>
+                <entry key="title" value="title"/>
+                <entry key="dc:title" value="title"/>
+                <entry key="keywords" value="key_words"/>
+                <entry key="meta:keyword" value="key_words"/>
+
+
+            </map>
+        </property>
+
+        results in a setMetadataMapperIdentifier(java.util.Map) call 
+        <property name="metadataMapperIdentifier">
+            <map>
+
+
+            </map>
+        </property>
+
+    </bean>
+    
+    Definition for org.uclv.darkaiv.organizer.WCDocumentFactory 
+    <bean id="worldcat" class="org.vlir.darkaiv.mappers.WCDocumentFactory">
+
+        results in a setMetadataMapperDocument(java.util.Map) call 
+        <property name="metadataMapperDocument">
+            <map>
+
+                <entry key="publisher" value="publisher"/>
+                <entry key="title" value="title"/>
+                <entry key="lang" value="idiom"/>
+                <entry key="ed" value="edition"/>                           
+
+
+            </map>
+        </property>
+
+        results in a setMetadataMapperIdentifier(java.util.Map) call 
+        <property name="metadataMapperIdentifier">
+            <map>
+
+
+            </map>
+        </property>
+
+    </bean>-->
+</beans>
